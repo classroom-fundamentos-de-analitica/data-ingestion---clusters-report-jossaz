@@ -13,8 +13,7 @@ import pandas as pd
 
 
 def ingest_data():
-
-    with open('clusters_report.txt', 'r') as file:
+with open('clusters_report.txt', 'r') as file:
     content = file.read()
 
 # Procesar los datos
@@ -39,6 +38,4 @@ df = pd.DataFrame(data)
 # Reemplazar espacios por guiones bajos en los nombres de las columnas
 df.columns = df.columns.str.replace(' ', '_').str.lower()
 
-
-
-    return df
+return df
