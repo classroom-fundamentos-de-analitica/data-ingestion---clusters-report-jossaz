@@ -39,7 +39,6 @@ df = pd.DataFrame(data)
 # Reemplazar espacios por guiones bajos en los nombres de las columnas
 df.columns = df.columns.str.replace(' ', '_').str.lower()
 
-# Mostrar el DataFrame resultante
-print(df)
+
 
     return df
