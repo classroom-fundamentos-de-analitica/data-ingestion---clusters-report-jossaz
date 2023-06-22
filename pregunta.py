@@ -31,7 +31,8 @@ def ingest_data():
           palabras_clave = match.group(4)
           
           # Realizar los ajustes en el formato de las palabras clave
-          palabras_clave = palabras_clave.replace('  ', '').replace(', ', ',').replace(',',', ')
+          palabras_clave = ' '.join(palabras_clave.split())
+          palabras_clave = re.sub(r'\b,\s+', ', ', palabras_clave)
           
           data.append([cluster, cantidad, porcentaje, palabras_clave])
   
