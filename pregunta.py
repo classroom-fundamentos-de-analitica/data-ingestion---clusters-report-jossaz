@@ -12,30 +12,34 @@ espacio entre palabra y palabra.
 import pandas as pd
 
 
-def ingest_data():
+import re
+
+# Leer el archivo de texto
 with open('clusters_report.txt', 'r') as file:
-    content = file.read()
+    lines = file.readlines()
 
-# Procesar los datos
-lines = content.split('\n')
+# Definir patrón de expresiones regulares para analizar cada línea
+pattern = r"\s+(\d+)\s+(\d+)\s+([\d,\.]+%)\s+(.+)"
+
+# Extraer los datos de cada línea y crear una lista de diccionarios
 data = []
-for line in lines:
+for line in lines[5:]:
     line = line.strip()
-    if line.startswith('Cluster') or line == '':
-        continue
-    elements = line.split()
-    cluster = {
-        'cluster': int(elements[0]),
-        'cantidad_de_palabras_clave': int(elements[1]),
-        'porcentaje_de_palabras_clave': float(elements[2].replace('%', '').replace(',', '.')),
-        'palabras_clave': ', '.join(elements[3:])
-    }
-    data.append(cluster)
+    if line:
+        match = re.match(pattern, line)
+        if match:
+            cluster = int(match.group(1))
+            cantidad = int(match.group(2))
+            porcentaje = float(match.group(3).rstrip('%').replace(',', '.'))
+            palabras_clave = match.group(4).replace('-', '').replace('  ', ', ')
+            data.append({
+                'cluster': cluster,
+                'cantidad_de_palabras_clave': cantidad,
+                'porcentaje_de_palabras_clave': porcentaje,
+                'principales_palabras_clave': palabras_clave
+            })
 
-# Crear el DataFrame
+# Crear el dataframe de Pandas
 df = pd.DataFrame(data)
-
-# Reemplazar espacios por guiones bajos en los nombres de las columnas
-df.columns = df.columns.str.replace(' ', '_').str.lower()
 
 return df
